@@ -1,0 +1,56 @@
+<ng-container>
+<section class="Aero-section">
+    <div class="container pt-5 pb-0">
+    <h2 class="text-white text-center fw-bold mb-4">
+        Busca tu próximo vuelo
+    </h2>
+
+    <form class="p-4 bg-dark rounded shadow text-white mb-0" (ngSubmit)="buscar()">
+
+        <div class="mb-4">
+        <label class="form-label fw-bold">Tipo de viaje</label>
+        <div class="d-flex gap-3">
+
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="trip">
+            <label class="form-check-label">Ida y vuelta</label>
+            </div>
+
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="trip">
+            <label class="form-check-label">Solo ida</label>
+            </div>
+
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="trip">
+            <label class="form-check-label">Multi-destino</label>
+            </div>
+
+        </div>
+        </div>
+
+<div class="row g-3">
+    <div class="col-md-5">
+        <label class="form-label">Origen</label>
+        <select class="form-control" [(ngModel)]="origen" name="origen">
+            <option value="">Selecciona un aeropuerto</option>
+            <option value="CDMX">AICM (Ciudad de México)</option>
+            <option value="AIFA">AIFA (Felipe Ángeles)</option>
+        </select>
+    </div>
+
+    <div class="col-md-5">
+        <label class="form-label">Destino</label>
+        <input type="text" class="form-control" placeholder="Ciudad de destino" [(ngModel)]="destino" name="destino">
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </div>
+</div>
+
+    </form>
+
+    </div>
+</section>
+</ng-container>

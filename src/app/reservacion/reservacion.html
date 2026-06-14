@@ -1,0 +1,96 @@
+<section class="py-5 bg-light text-dark">
+  <div class="container">
+
+    <h1 class="fw-bold text-center mb-4">Reservación</h1>
+
+    <div class="card p-4 shadow mx-auto" style="max-width: 520px;">
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Nombre completo</label>
+        <input class="form-control" type="text" placeholder="Ej. Juan Pérez"
+          [(ngModel)]="reserva.nombre"
+          [class.is-invalid]="error && !reserva.nombre">
+        <div class="invalid-feedback">Ingresa tu nombre.</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Destino</label>
+        <select class="form-select" [(ngModel)]="reserva.destino"
+          [class.is-invalid]="error && !reserva.destino">
+          <option value="">Selecciona un destino</option>
+          <option *ngFor="let d of destinos" [value]="d">{{ d }}</option>
+        </select>
+        <div class="invalid-feedback">Selecciona un destino.</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Fecha de viaje</label>
+        <input class="form-control" type="date" [(ngModel)]="reserva.fecha"
+          [min]="fechaMinima"
+          [class.is-invalid]="error && !reserva.fecha">
+        <div class="invalid-feedback">Selecciona una fecha válida.</div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Pasajeros</label>
+        <input class="form-control" type="number" min="1" max="10"
+          [(ngModel)]="reserva.pasajeros">
+      </div>
+
+      <button class="btn btn-primary w-100 fw-bold"
+        data-bs-toggle="modal" data-bs-target="#modalConfirmacion"
+        (click)="reservar()">
+        Confirmar reservación
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- MODAL BOOTSTRAP -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1" *ngIf="confirmada">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title fw-bold">¡Reservación confirmada!</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <td class="fw-semibold">Nombre</td>
+              <td>{{ reserva.nombre }}</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Destino</td>
+              <td>{{ reserva.destino }}</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Fecha</td>
+              <td>{{ reserva.fecha }}</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Pasajeros</td>
+              <td>{{ reserva.pasajeros }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary"
+          data-bs-dismiss="modal" (click)="nueva()">
+          Nueva reservación
+        </button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+          Aceptar
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
