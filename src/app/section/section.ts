@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VueloFiltro } from '../vuelos-filtro';
+import { Router } from '@angular/router';
+import { VueloService } from '../vuelo.service';
 
 @Component({
   selector: 'app-section',
@@ -10,14 +11,18 @@ import { VueloFiltro } from '../vuelos-filtro';
 })
 export class Section {
 
-  constructor(public vuelosFiltro: VueloFiltro) {}
+  constructor(private vueloService: VueloService, private router: Router) {}
 
- verVuelos(destino: string, event: Event) {
-  event.preventDefault();
-  console.log('Destino clickeado:', destino);
-  this.vuelosFiltro.buscar('', destino);
-  console.log('filtroDestino después:', this.vuelosFiltro.filtroDestino());
-  console.log('abrirModal después:', this.vuelosFiltro.abrirModal());
-}
-  
+  verVuelos(destino: string, event: Event) {
+    event.preventDefault();
+    this.vueloService.getVuelos().subscribe({
+      next: (todos) => {
+        const filtrados = todos.filter(v =>
+          v.destino.toLowerCase().includes(destino.toLowerCase())
+        );
+        sessionStorage.setItem('resultadosVuelos', JSON.stringify(filtrados));
+        this.router.navigate(['/catalogo']);
+      }
+    });
+  }
 }

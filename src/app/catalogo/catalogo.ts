@@ -1,56 +1,41 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
-import { CommonModule, CurrencyPipe, NgFor, NgIf } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { VueloFiltro } from '../vuelos-filtro';
+import { Component, signal, OnInit } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { VueloService } from '../vuelo.service';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, NgFor, NgIf],
+  imports: [CommonModule, CurrencyPipe, RouterLink],
   templateUrl: './catalogo.html',
   styleUrl: './catalogo.css'
 })
 export class Catalogo implements OnInit {
-
   vuelos = signal<any[]>([]);
+  vueloSeleccionado: any = null;
 
-  constructor(
-    private http: HttpClient,
-    public vuelosFiltro: VueloFiltro
-  ) {}
+  constructor(private vueloService: VueloService) {}
 
   ngOnInit() {
-    this.http.get<any[]>('/vuelos.json').subscribe({
-      next: (data) => this.vuelos.set(data),
-      error: (err) => console.error('Error cargando vuelos:', err)
-    });
+    const guardados = sessionStorage.getItem('resultadosVuelos');
+    if (guardados) {
+      try {
+        const parsed = JSON.parse(guardados);
+        this.vuelos.set(Array.isArray(parsed) ? parsed : []);
+      } catch {
+        this.vuelos.set([]);
+      }
+    }
   }
 
-  vuelosFiltrados = computed(() => {
-    const origen = this.vuelosFiltro.filtroOrigen();
-    const destino = this.vuelosFiltro.filtroDestino();
+  getAerolinea(vuelo: any): string { return vuelo.aerolinea ?? ''; }
+  getFecha(vuelo: any): string     { return vuelo.fecha ?? ''; }
+  getHora(vuelo: any): string      { return vuelo.hora ?? ''; }
+  getDuracion(vuelo: any): string  { return vuelo.duracion ?? ''; }
+  getPrecio(vuelo: any): number    { return vuelo.precio ?? 0; }
 
-    if (!this.vuelosFiltro.busquedaRealizada()) {
-      return this.vuelos();
-    }
-
-    return this.vuelos().filter(v =>
-      v.origen.toLowerCase().includes(origen) &&
-      v.destino.toLowerCase().includes(destino)
-    );
-  });
-
-  resultadosBusqueda = computed(() => {
-    const origen = this.vuelosFiltro.filtroOrigen();
-    const destino = this.vuelosFiltro.filtroDestino();
-
-    return this.vuelos().filter(v =>
-      v.origen.toLowerCase().includes(origen) &&
-      v.destino.toLowerCase().includes(destino)
-    );
-  });
-
-  cerrarModal() {
-    this.vuelosFiltro.limpiar();
+  seleccionar(vuelo: any) {
+    this.vueloSeleccionado = vuelo;
+    sessionStorage.setItem('vueloSeleccionado', JSON.stringify(vuelo));
   }
 }

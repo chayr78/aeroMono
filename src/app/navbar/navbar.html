@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg aeromono-nav">
   <div class="container">
 
-    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
       <div class="logo-wrapper">
         <img src="/bape.png" alt="Logo" width="55" height="55" class="logo-img">
       </div>
@@ -10,6 +10,29 @@
         <span class="brand-sub">Vuela Monito</span>
       </div>
     </a>
+
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item">
+          <a class="nav-link fw-bold" routerLink="/"
+            routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" routerLink="/catalogo" routerLinkActive="active-link">Vuelos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" routerLink="/destinos" routerLinkActive="active-link">Destinos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" routerLink="/reservar" routerLinkActive="active-link">Reservar</a>
+        </li>
+      </ul>
+    </div>
 
   </div>
 </nav>

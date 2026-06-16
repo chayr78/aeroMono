@@ -35,3 +35,14 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
+.nav-link {
+  color: #3d2000 !important;
+  transition: all 0.2s;
+  border-radius: 6px;
+  padding: 6px 12px !important;
+}
+
+.nav-link:hover, .active-link {
+  color: #fff !important;
+  background: rgba(0,0,0,0.2);
+}

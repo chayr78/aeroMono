@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-declare var bootstrap: any;
+import { VueloService } from '../vuelo.service';
 
 @Component({
   selector: 'app-reservacion',
@@ -11,44 +10,112 @@ declare var bootstrap: any;
   templateUrl: './reservacion.html',
   styleUrl: './reservacion.css',
 })
-export class Reservacion {
+export class Reservacion implements OnInit {
 
-  reserva = {
-    nombre: '',
-    destino: '',
-    fecha: '',
-    pasajeros: 1
-  };
-
+  reserva = { nombre: '', origen: '', destino: '', fecha: '', pasajeros: 1 };
   confirmada = false;
   error = false;
-  fechaMinima = new Date().toISOString().split('T')[0];  // ← fecha de hoy
+  guardando = false;
+  folioGenerado = '';
+  fechaMinima = new Date().toISOString().split('T')[0];
 
-  destinos = [
-    'Cancún',
-    'Puerto Vallarta',
-    'Guadalajara',
-    'Mazatlán',
-    'Los Cabos'
-  ];
+  folioBusqueda = '';
+  reservaEncontrada: any = null;
+  buscando = false;
+  errorBusqueda = '';
+  modoVista: 'formulario' | 'busqueda' = 'formulario';
+
+  origenes: string[] = [];
+  destinos: string[] = [];
+
+  constructor(private vueloService: VueloService) {}
+
+  ngOnInit() {
+    // Carga origenes y destinos únicos desde los vuelos reales
+    this.vueloService.getVuelos().subscribe({
+      next: (vuelos) => {
+        const setOrigenes = new Set<string>();
+        const setDestinos = new Set<string>();
+        vuelos.forEach(v => {
+          if (v.origen) setOrigenes.add(v.origen);
+          if (v.destino) setDestinos.add(v.destino);
+        });
+        this.origenes = Array.from(setOrigenes).sort();
+        this.destinos = Array.from(setDestinos).sort();
+      }
+    });
+  }
+
+  private generarFolio(): string {
+    const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const parte1 = Array.from({ length: 3 }, () =>
+      letras[Math.floor(Math.random() * letras.length)]).join('');
+    const parte2 = Math.floor(1000 + Math.random() * 9000);
+    return `${parte1}-${parte2}`;
+  }
 
   reservar() {
-    if (!this.reserva.nombre || !this.reserva.destino || !this.reserva.fecha) {
+    if (!this.reserva.nombre || !this.reserva.origen ||
+        !this.reserva.destino || !this.reserva.fecha) {
       this.error = true;
       return;
     }
     this.error = false;
-    this.confirmada = true;
+    this.guardando = true;
+    this.confirmada = false;
+    this.folioGenerado = '';
 
-    setTimeout(() => {
-      const modal = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
-      modal.show();
-    }, 100);
+    const folio = this.generarFolio();
+    const nuevaReserva = {
+      ...this.reserva,
+      folio,
+      creadoEn: new Date().toISOString()
+    };
+
+    this.vueloService.crearReservacion(nuevaReserva).subscribe({
+      next: () => {
+        this.folioGenerado = folio;
+        this.confirmada = true;
+        this.guardando = false;
+      },
+      error: () => {
+        this.guardando = false;
+        this.error = true;
+      }
+    });
+  }
+
+  buscarFolio() {
+    const folio = this.folioBusqueda.trim().toUpperCase();
+    if (!folio) {
+      this.errorBusqueda = 'Ingresa un folio.';
+      return;
+    }
+    this.buscando = true;
+    this.errorBusqueda = '';
+    this.reservaEncontrada = null;
+
+    this.vueloService.buscarPorFolio(folio).subscribe({
+      next: (res) => {
+        this.buscando = false;
+        if (res.length > 0) {
+          this.reservaEncontrada = res[0];
+        } else {
+          this.errorBusqueda = `No se encontro ninguna reservacion con el folio "${folio}".`;
+        }
+      },
+      error: () => {
+        this.buscando = false;
+        this.errorBusqueda = 'Error al conectar. Verifica que JSON Server este corriendo.';
+      }
+    });
   }
 
   nueva() {
-    this.reserva = { nombre: '', destino: '', fecha: '', pasajeros: 1 };
+    this.reserva = { nombre: '', origen: '', destino: '', fecha: '', pasajeros: 1 };
     this.confirmada = false;
     this.error = false;
+    this.folioGenerado = '';
+    this.guardando = false;
   }
 }
