@@ -1,0 +1,11 @@
+{
+  "/api-ignav": {
+    "target": "https://ignav.com",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api-ignav": ""
+    },
+    "secure": true,
+    "logLevel": "debug"
+  }
+}

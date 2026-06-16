@@ -1,0 +1,22 @@
+.reservacion-bg {
+  min-height: 100vh;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+    url('/fondo.png');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+/* Hace que las cards se vean más limpias sobre el fondo */
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(3px);
+  border-radius: 12px;
+}

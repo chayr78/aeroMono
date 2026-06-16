@@ -1,0 +1,48 @@
+.aeromono-nav {
+  background: linear-gradient(135deg, #f9e027 0%, #f5c518 50%, #e6a817 100%);
+  padding: 0.6rem 0;
+  box-shadow: 0 4px 20px rgba(200, 150, 0, 0.4);
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-img {
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.logo-img:hover {
+  box-shadow: 0 0 22px rgba(0, 0, 0, 0.35);
+}
+
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #3d2000;
+  text-transform: uppercase;
+}
+
+.brand-sub {
+  font-size: 0.7rem;
+  color: rgba(61, 32, 0, 0.6);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.nav-link {
+  color: #3d2000 !important;
+  transition: all 0.2s;
+  border-radius: 6px;
+  padding: 6px 12px !important;
+}
+
+.nav-link:hover, .active-link {
+  color: #fff !important;
+  background: rgba(0,0,0,0.2);
+}

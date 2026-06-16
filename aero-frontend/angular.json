@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "aero-frontend": {
+    "Aero": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -26,7 +26,11 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
+            ],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
           "configurations": {
@@ -55,12 +59,16 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "Aero:build:development",
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
-              "buildTarget": "aero-frontend:build:production"
+              "buildTarget": "Aero:build:production"
             },
             "development": {
-              "buildTarget": "aero-frontend:build:development"
+              "buildTarget": "Aero:build:development"
             }
           },
           "defaultConfiguration": "development"
